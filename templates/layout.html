@@ -1,15 +1,32 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Home {% endblock %} | Bookshelf Library</title>
-   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <title>{% block title %}Home{% endblock  %} Bookshelf · Library</title>
+  <link rel='icon' href="{% static 'images/logo.png' %}" type='image/x-icon'>
+  <!-- Tailwind via CDN + custom inter font -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', system-ui, sans-serif; }
+    /* subtle transitions for links/buttons */
+    .nav-link, .btn { transition: all 0.15s ease; }
+  </style>
 </head>
-<body class="flex justify-center items-center h-screen">
-  {% block body %}
+<body class="bg-[#faf9f6] text-slate-800 antialiased flex flex-col min-h-screen">
 
-  {% endblock %}
+  {% include "nav.html" %}
+
+  <!-- ========== MAIN CONTENT (placeholder – your Django blocks will fill this) ========== -->
+  <main class="flex-1 max-w-7xl mx-auto w-full px-5 sm:px-8 py-10 md:py-14">
+    {% block content %}
+    
+    {% endblock %}
+  </main>
+
   
+  {% include "footer.html" %}
 </body>
 </html>

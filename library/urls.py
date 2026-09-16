@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from shelf import urls as shelf_urls
 
-
+app_name = 'library'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(shelf_urls)),
