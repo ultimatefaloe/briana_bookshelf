@@ -1,11 +1,16 @@
 from django.shortcuts import render
+from .models import Book
 
 # Create your views here.
 def home(request):
     return render(request, 'shelf/home.html')
 
 def books(request):
-    return render(request, 'shelf/books.html')
+    books = Book.objects.all()
+    context = {
+        'books': books
+    }
+    return render(request, 'shelf/books.html', context)
 
 def book_add(request):
     return render(request, 'shelf/book_add.html')
