@@ -6,9 +6,25 @@ def home(request):
     return render(request, 'shelf/home.html')
 
 def books(request):
-    books = Book.objects.all()
+    filter = {
+        'search': request.GET.get('search', ''),
+        'status': request.GET.get('status', '')
+    }
+    
+    if filter['search'] and filter['status']:
+        books = Book.objects.filter(title__icontains=filter['search'], status=filter['status'])
+    elif filter['search']:
+        books = Book.objects.filter(title__icontains=filter['search'])
+    elif filter['status']:
+        books = Book.objects.filter(status=filter['status'])
+    else:
+        books = Book.objects.all()
+
+    statuses = Book.STATUS_CHOICES
     context = {
-        'books': books
+        'books': books,
+        'statuses': statuses,
+        'filter': filter
     }
     return render(request, 'shelf/books.html', context)
 

@@ -27,21 +27,29 @@
   </div>
 
   <!-- Search / filter bar (UI only) -->
-  <div class="flex flex-col sm:flex-row gap-3">
+  <form method="get" action="" class="flex flex-col sm:flex-row gap-3">
+    {% csrf_token %}
     <div class="relative flex-1">
       <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
       </svg>
-      <input type="text" placeholder="Search books, authors…"
+      <input type="text" name="search" id="search" placeholder="Search books, authors…" value="{{ filter.search|default_if_none:'' }}"
              class="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-stone-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-600/30 focus:border-amber-600 placeholder:text-stone-400" />
     </div>
-    <select class="px-4 py-2.5 text-sm bg-white border border-stone-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-600/30 focus:border-amber-600 text-stone-600">
-      <option>All statuses</option>
-      <option>Available</option>
-      <option>Borrowed</option>
-      <option>Reading</option>
+   <select name="status" id="status"
+        class="px-4 py-2.5 text-sm bg-white border border-stone-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-600/30 focus:border-amber-600 text-stone-600">
+        <option value="">All statuses</option>
+        {% for status in statuses %}
+            <option value="{{ status.0 }}" {% if filter.status == status.0 %}selected{% endif %}>
+            {{ status.1 }}
+            </option>
+        {% endfor %}
     </select>
-  </div>
+
+    <button type="submit" class="px-4 py-2.5 bg-amber-700 hover:bg-amber-800 text-white text-sm font-semibold rounded-lg shadow-sm hover:shadow transition-all">
+        Filter
+    </button>
+  </form>
 
   <!-- Books grid -->
   {% if books %}
