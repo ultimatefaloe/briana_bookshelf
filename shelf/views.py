@@ -1,5 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import Book
+from .forms import BookForm
+from django.contrib import messages
+
 
 # Create your views here.
 def home(request):
@@ -29,7 +32,21 @@ def books(request):
     return render(request, 'shelf/books.html', context)
 
 def book_add(request):
-    return render(request, 'shelf/book_add.html')
+    context = {}
+    
+    if request.method == 'POST':
+        form = BookForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Book added successfully!')
+            return redirect('shelf:books')
+        else:
+            messages.error(request, 'Error adding book. Please check the form for errors.')
+    else:
+        form = BookForm()
+    
+    context['form'] = form
+    return render(request, 'shelf/book_add.html', context)
 
 def book_detail(request, pk):
     
