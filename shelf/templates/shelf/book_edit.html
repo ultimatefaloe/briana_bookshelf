@@ -1,8 +1,59 @@
 {% extends "layout.html" %}
-
 {% block title %}Edit Book{% endblock %}
 
 {% block content %}
-    <h1>Edit Book {{ book_id }}</h1>
-    <p>This is the edit book page.</p>
+<div class="flex flex-col gap-8">
+
+  {# Breadcrumb #}
+  <nav class="flex items-center gap-1.5 text-sm text-stone-500 mb-6">
+    <a href="{% url 'shelf:books' %}" class="hover:text-amber-800 transition">Books</a>
+    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+    </svg>
+    <span class="text-stone-800 font-medium">Edit book</span>
+  </nav>
+
+  <div class="bg-white rounded-2xl border border-stone-200/70 shadow-sm overflow-hidden">
+
+    {# Header #}
+    <div class="px-6 md:px-8 pt-6 md:pt-8 pb-5 border-b border-stone-100">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-amber-50 ring-1 ring-amber-200 flex items-center justify-center text-amber-700 shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-xl md:text-2xl font-bold tracking-tight text-stone-800">Edit book</h1>
+          <p class="text-sm text-stone-500 mt-0.5">
+            {% if book %}<span class="text-stone-700 font-medium">{{ book.title }}</span> · {% endif %}
+            Update the details and save your changes.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {# Form #}
+    <form method="post" novalidate class="px-6 md:px-8 py-6 md:py-8">
+      {% csrf_token %}
+      {% include "components/book_form.html" with form=form %}
+
+      {# Actions #}
+      <div class="mt-8 pt-5 border-t border-stone-100 flex items-center justify-between gap-3">
+        <a href="{% url 'shelf:books' %}"
+           class="px-4 py-2.5 text-sm font-medium text-stone-700 rounded-lg hover:bg-stone-100 transition">
+          Cancel
+        </a>
+        <button type="submit"
+                class="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-700 hover:bg-amber-800 text-white text-sm font-semibold rounded-lg shadow-sm hover:shadow transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+          Save changes
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
 {% endblock %}

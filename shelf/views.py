@@ -46,6 +46,7 @@ def book_add(request):
         form = BookForm()
     
     context['form'] = form
+    print(type(form))
     return render(request, 'shelf/book_add.html', context)
 
 def book_detail(request, pk):
