@@ -46,25 +46,57 @@ def book_add(request):
         form = BookForm()
     
     context['form'] = form
-    print(type(form))
     return render(request, 'shelf/book_add.html', context)
 
 def book_detail(request, pk):
+    context = {}
+    try:
+        book = Book.objects.get(pk=pk)
+        context['book'] = book
+    except Book.DoesNotExist:
+        messages.error(request, 'Book not found.')
+        return redirect('shelf:books')
     
-    context = {
-        'book_id': pk
-    }
     return render(request, 'shelf/book_detail.html', context)  
 
 def book_edit(request, pk):
-    context = {
-        'book_id': pk
-    }
+    context = {}
+    if not pk:
+        messages.error(request, 'Book ID is required for editing.')
+        return redirect('shelf:books')
+    try:
+        book = Book.objects.get(pk=pk)
+    except Book.DoesNotExist:
+        messages.error(request, 'Book not found.')
+        return redirect('shelf:books')
+    
+    if request.method == 'POST':
+        form = BookForm(request.POST, instance=book)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Book updated successfully!')
+            return redirect('shelf:books')
+        else:
+            messages.error(request, 'Error updating book. Please check the form for errors.')
+        
+    else:
+        context['form'] = BookForm(instance=book)
     return render(request, 'shelf/book_edit.html', context)
 
 def book_delete(request, pk):
-    context = {
-        'book_id': pk
-    }
-    return render(request, 'shelf/book_delete.html', context)
-
+    if not pk:
+        messages.error(request, 'Book ID is required for deletion.')
+        return redirect('shelf:books')
+    if request.method == 'POST':
+        try:
+            book = Book.objects.get(pk=pk)
+            book.delete()
+            messages.success(request, 'Book deleted successfully!')
+            return redirect('shelf:books')
+            
+        except Book.DoesNotExist:
+            messages.error(request, 'Book not found.')
+            return redirect('shelf:books')
+    else:
+        messages.error(request, 'Invalid request method for deletion.')
+        return redirect('shelf:books')

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Home{% endblock  %} Bookshelf · Library</title>
+  <title>{% block title %}Home{% endblock  %} | Bookshelf Library</title>
   <link rel='icon' href="{% static 'images/logo.png' %}" type='image/x-icon'>
   <!-- Tailwind via CDN + custom inter font -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -17,8 +17,7 @@
 </head>
 <body class="bg-[#faf9f6] text-slate-800 antialiased flex flex-col min-h-screen">
 
-  {% include "component/message.html" with messages=messages %}
-
+  {% include "components/message.html" with messages=messages %}
   
   {% include "nav.html" %}
 
@@ -31,5 +30,7 @@
 
   
   {% include "footer.html" %}
+
+  <script type="module" src={% static "js/app.js" %} ></script>
 </body>
 </html>
