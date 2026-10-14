@@ -31,7 +31,7 @@ FILE_CLASSES = (
 class BookForm(forms.ModelForm):
     class Meta:
       model = Book
-      fields = ['title', 'author', 'description', 'status', 'isbn']
+      fields = ('title', 'author', 'description', 'status', 'isbn')
       widgets = {
         'title': forms.TextInput(attrs={'class': INPUT_CLASSES, 'placeholder': 'Enter book title'}),
         'author': forms.TextInput(attrs={'class': INPUT_CLASSES, 'placeholder': 'Enter author name'}),

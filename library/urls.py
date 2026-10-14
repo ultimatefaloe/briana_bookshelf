@@ -17,9 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from shelf import urls as shelf_urls
+from account import urls as account_urls
 
 app_name = 'library'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(shelf_urls)),
+    path('', include(account_urls)),
 ]

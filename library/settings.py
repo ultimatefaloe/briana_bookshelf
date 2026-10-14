@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-!j$hd&e=x*+014l#x*m()sn^4bl$d8jbo%i%3xoa7m8nd))x!$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','http://127.0.0.1', '127.0.0.1' ]
+LOGIN_URL = 'account:login'
+LOGIN_REDIRECT_URL = 'shelf:home'
+LOGOUT_REDIRECT_URL = 'account:login'
 
 
 # Application definition
@@ -38,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shelf',
+    'account',
 ]
 
 MIDDLEWARE = [
