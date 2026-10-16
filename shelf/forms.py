@@ -31,11 +31,12 @@ FILE_CLASSES = (
 class BookForm(forms.ModelForm):
     class Meta:
       model = Book
-      fields = ('title', 'author', 'description', 'status', 'isbn')
+      fields = ('title', 'author', 'description', 'status', 'isbn', 'book_cover')
       widgets = {
         'title': forms.TextInput(attrs={'class': INPUT_CLASSES, 'placeholder': 'Enter book title'}),
         'author': forms.TextInput(attrs={'class': INPUT_CLASSES, 'placeholder': 'Enter author name'}),
         'description': forms.Textarea(attrs={'class': TEXTAREA_CLASSES, 'placeholder': 'Enter book description'}),
         'status': forms.Select(attrs={'class': SELECT_CLASSES}),
         'isbn': forms.TextInput(attrs={'class': INPUT_CLASSES, 'placeholder': 'Enter ISBN'}),
+        'book_cover': forms.FileInput(attrs={'class': FILE_CLASSES}),
       }

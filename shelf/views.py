@@ -2,6 +2,8 @@ from django.shortcuts import redirect, render
 from .models import Book
 from .forms import BookForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 
 
 # Create your views here.
@@ -31,13 +33,20 @@ def books(request):
     }
     return render(request, 'shelf/books.html', context)
 
+
+@login_required()
 def book_add(request):
     context = {}
     
     if request.method == 'POST':
         form = BookForm(request.POST)
+        files = request.FILES.get('book_cover')
         if form.is_valid():
-            form.save()
+            book = form.save(commit=False)
+            book.owner = request.user
+            if files:
+                book.book_cover = files
+            book.save()
             messages.success(request, 'Book added successfully!')
             return redirect('shelf:books')
         else:
@@ -59,21 +68,35 @@ def book_detail(request, pk):
     
     return render(request, 'shelf/book_detail.html', context)  
 
+@login_required()
 def book_edit(request, pk):
     context = {}
     if not pk:
         messages.error(request, 'Book ID is required for editing.')
         return redirect('shelf:books')
+    
+    # get book by id
     try:
         book = Book.objects.get(pk=pk)
+        print(book.book_cover)
     except Book.DoesNotExist:
         messages.error(request, 'Book not found.')
         return redirect('shelf:books')
     
+    # check for authorization
+    if request.user != book.owner:
+        messages.error(request, 'You do not have permission to edit this book.')
+        return redirect('shelf:books')
+    
+    # handle form submission
     if request.method == 'POST':
         form = BookForm(request.POST, instance=book)
+        files = request.FILES.get('book_cover')
         if form.is_valid():
-            form.save()
+            book = form.save(commit=False)
+            if files:
+                book.book_cover = files
+            book.save()
             messages.success(request, 'Book updated successfully!')
             return redirect('shelf:books')
         else:
@@ -83,10 +106,28 @@ def book_edit(request, pk):
         context['form'] = BookForm(instance=book)
     return render(request, 'shelf/book_edit.html', context)
 
+@login_required()
 def book_delete(request, pk):
+    # check if book id is provided
     if not pk:
         messages.error(request, 'Book ID is required for deletion.')
         return redirect('shelf:books')
+    
+    # get book by id
+    try:
+        book = Book.objects.get(pk=pk)
+        print(book.book_cover)
+    except Book.DoesNotExist:
+        messages.error(request, 'Book not found.')
+        return redirect('shelf:books')
+    
+    # check for autorization
+    if request.user != book.owner:
+        messages.error(request, 'You do not have permission to delete this book.')
+        return redirect('shelf:books')
+        
+
+    # hanle deletion
     if request.method == 'POST':
         try:
             book = Book.objects.get(pk=pk)

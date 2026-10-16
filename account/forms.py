@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 
 # Shared base styles
@@ -50,6 +50,49 @@ class LoginForm(AuthenticationForm):
                 "class": PASSWORD_CLASSES,
                 "placeholder": "Enter your password",
                 "autocomplete": "current-password",
+                # Alpine will toggle this dynamically:
+                "x-bind:type": "show ? 'text' : 'password'",
+            }
+        )
+    )
+    
+class RegisterForm(UserCreationForm):
+    username = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "class": INPUT_CLASSES,
+                "placeholder": "Enter your username",
+                "autocomplete": "username",
+                "autofocus": True,
+            }
+        )
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                "class": INPUT_CLASSES,
+                "placeholder": "Enter your email",
+                "autocomplete": "email",
+            }
+        )
+    )
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "class": PASSWORD_CLASSES,
+                "placeholder": "Enter your password",
+                "autocomplete": "new-password",
+                # Alpine will toggle this dynamically:
+                "x-bind:type": "show ? 'text' : 'password'",
+            }
+        )
+    )
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                "class": PASSWORD_CLASSES,
+                "placeholder": "Confirm your password",
+                "autocomplete": "new-password",
                 # Alpine will toggle this dynamically:
                 "x-bind:type": "show ? 'text' : 'password'",
             }

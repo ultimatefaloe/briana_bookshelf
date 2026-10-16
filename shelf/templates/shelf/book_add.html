@@ -32,7 +32,7 @@
     </div>
 
     {# Form #}
-    <form method="post" novalidate class="px-6 md:px-8 py-6 md:py-8">
+    <form method="post" novalidate class="px-6 md:px-8 py-6 md:py-8" enctype="multipart/form-data">
       {% csrf_token %}
       {% include "components/book_form.html" with form=form %}
 

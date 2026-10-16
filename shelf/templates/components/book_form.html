@@ -87,6 +87,34 @@ Fields rendered explicitly (no looping) based on BookForm.Meta.fields.
     {% endif %}
   </div>
 
+
+  {# ---------- Book Cover ---------- #}
+  <div class="flex flex-col gap-1.5">
+    <label for="{{ form.book_cover.id_for_label }}"
+           class="text-sm font-medium text-stone-800">
+      {{ form.book_cover.label }}
+      {% if form.book_cover.field.required %}
+        <span class="text-rose-500 ml-0.5" aria-hidden="true">*</span>
+      {% endif %}
+    </label>
+
+    {% if form.book_cover.errors %}
+      <div class="relative rounded-lg ring-1 ring-rose-400/60">{{ form.book_cover }}</div>
+      <ul class="mt-1 space-y-1">
+        {% for error in form.book_cover.errors %}
+          <li class="flex items-start gap-1.5 text-xs text-rose-600">
+            <svg class="w-3.5 h-3.5 mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0 3.75h.008v.008H12v-.008zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{{ error }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="relative">{{ form.book_cover }}</div>
+    {% endif %}
+  </div>
+
   {# ---------- Status + ISBN (side-by-side on md+) ---------- #}
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 

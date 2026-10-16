@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.http import HttpResponse
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.decorators.http import require_http_methods
 
 # Create your views here.
 def login_view(request):
@@ -33,8 +34,25 @@ def login_view(request):
     return render(request, 'account/login.html', context)
 
 def register_view(request):
-    return HttpResponse("Register Page")
-  
+    context = {}
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Registration successful!')
+            return redirect('shelf:home')
+        else:
+            print(form.errors)
+            messages.error(request, 'Invalid registration credentials. Please try again.')
+            context['form'] = form
+    else:
+        form = RegisterForm()
+        context['form'] = form
+
+    return render(request, 'account/register.html', context)
+
+@require_http_methods(["POST"])
 def logout_view(request):
     
     if request.method == 'POST':
